@@ -2,8 +2,10 @@
 
 project ("Stereo-Reconstruction-Group")
 
-find_package(OpenCV REQUIRED)
+find_package (OpenCV REQUIRED)
 
-add_executable (Stereo-Reconstruction-Group "main.c" "main.h")
+ADD_LIBRARY(match_points STATIC "match_points.cpp" "match_points.h")
+ADD_EXECUTABLE (${PROJECT_NAME} "main.c")
+TARGET_LINK_LIBRARIES (match_points ${OpenCV_LIBS})  
+TARGET_LINK_LIBRARIES (${PROJECT_NAME} match_points)
 
-target_link_libraries(Stereo-Reconstruction-Group opencv_core opencv_imgcodecs) # if any specific opencv components are required, this is where they go

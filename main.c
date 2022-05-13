@@ -1,18 +1,17 @@
-﻿#include "main.h"
-
 #include <stdio.h>
-#include <opencv2/imgcodecs/imgcodecs_c.h>
+#include <stdlib.h>
+#include "match_points.h"
 
-int main(int argc, char* argv[])
-{
-	IplImage* img1 = cvLoadImage("test.png", 1);
-	if (img1 == NULL) {
-		printf("Invalid image file!\n");
-		return -1;
-	}
-	IplImage* img2 = cvLoadImage("test2.png", 1);
-	if (img2 == NULL) {
-		printf("Invalid image file!\n");
-		return -1;
+
+int main(int argc, char *argv[]) {
+	Points* p = malloc(sizeof(Points));
+
+	get_match_points("..\\..\\..\\images\\view0.png", "..\\..\\..\\images\\view1.png", &p);
+
+	for (int y = 0; y < p->length; y++) {
+		for (int x = 0; x < p->width; x++) {
+			printf("%f, %f  ", p->points[x][y].x, p->points[x][y].y);
+		}
+		printf("\n");
 	}
 }
