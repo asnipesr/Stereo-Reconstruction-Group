@@ -12,7 +12,7 @@ using namespace std;
 
 #endif
 
-double RATIO_THRESHOLD = 0.7;
+const double RATIO_THRESHOLD = 0.7;
 #ifdef __cplusplus
 extern "C" {
 #endif
