@@ -3,6 +3,12 @@
 #include "match_points.h"
 
 
+typedef struct {
+	double x;
+	double y;
+	double z;
+} vector;
+
 int main(int argc, char *argv[]) {
 	Points* p = malloc(sizeof(Points));
 

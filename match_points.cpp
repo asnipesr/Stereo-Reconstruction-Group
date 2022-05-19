@@ -3,11 +3,12 @@
 void get_match_points(char* file1, char* file2, Points** points) {
 	Mat img1 = imread(file1, ImreadModes::IMREAD_GRAYSCALE);
 	if (img1.empty()) {
-
+		printf("Invalid image!\n");
 		exit(-1);
 	}
 	Mat img2 = imread(file2, ImreadModes::IMREAD_GRAYSCALE);
 	if (img2.empty()) {
+		printf("Invslid image!\n");
 		exit(-1);
 	}
 
@@ -35,6 +36,10 @@ void get_match_points(char* file1, char* file2, Points** points) {
 			goodTrainKeypoints.push_back(trainKeypoints[matches[i][0].trainIdx]);
 		}
 	}
+	Mat o;
+	drawMatches(img1, queryKeypoints, img2, trainKeypoints, goodMatches, o);
+	imshow("matches", o);
+	waitKey();
 
 	vector<Point2f> queryPoints;
 	vector<Point2f> trainPoints;
@@ -58,5 +63,5 @@ void get_match_points(char* file1, char* file2, Points** points) {
 
 	(*points)->points = p;
 	(*points)->width = 2;
-	(*points)->length = queryPos.size();
+	(*points)->length = (int)queryPos.size();
 }
