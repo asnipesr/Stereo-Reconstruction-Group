@@ -1,9 +1,6 @@
 out/
 .vs/
-<<<<<<< HEAD
 .vscode
 .DS_Store
 build
-=======
->>>>>>> 49a3f0a60dca37f9fc086e23f39bec61f502f64d
 CMakeLists.txt

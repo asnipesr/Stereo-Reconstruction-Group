@@ -1,13 +1,16 @@
 #include "match_points.h"
 
-void get_match_points(char* file1, char* file2, Points** points) {
+void get_match_points(char *file1, char *file2, Points **points)
+{
 	Mat img1 = imread(file1, ImreadModes::IMREAD_GRAYSCALE);
-	if (img1.empty()) {
+	if (img1.empty())
+	{
 		printf("Invalid image!\n");
 		exit(-1);
 	}
 	Mat img2 = imread(file2, ImreadModes::IMREAD_GRAYSCALE);
-	if (img2.empty()) {
+	if (img2.empty())
+	{
 		printf("Invslid image!\n");
 		exit(-1);
 	}
@@ -27,19 +30,16 @@ void get_match_points(char* file1, char* file2, Points** points) {
 	vector<KeyPoint> goodQueryKeypoints;
 	vector<KeyPoint> goodTrainKeypoints;
 
-
 	matcher->knnMatch(queryDescriptors, trainDescriptors, matches, 2);
-	for (int i = 0; i < matches.size(); i++) {
-		if (matches[i][0].distance < RATIO_THRESHOLD * matches[i][1].distance) {
+	for (int i = 0; i < matches.size(); i++)
+	{
+		if (matches[i][0].distance < RATIO_THRESHOLD * matches[i][1].distance)
+		{
 			goodMatches.push_back(matches[i][0]);
 			goodQueryKeypoints.push_back(queryKeypoints[matches[i][0].queryIdx]);
 			goodTrainKeypoints.push_back(trainKeypoints[matches[i][0].trainIdx]);
 		}
 	}
-	Mat o;
-	drawMatches(img1, queryKeypoints, img2, trainKeypoints, goodMatches, o);
-	imshow("matches", o);
-	waitKey();
 
 	vector<Point2f> queryPoints;
 	vector<Point2f> trainPoints;
@@ -49,17 +49,57 @@ void get_match_points(char* file1, char* file2, Points** points) {
 
 	vector<Pos> queryPos;
 	vector<Pos> trainPos;
-	Pos** p = new Pos*[2];
+	Pos **p = new Pos *[2];
 	p[0] = new Pos[queryPoints.size()];
 	p[1] = new Pos[queryPoints.size()];
-	for (int i = 0; i < queryPoints.size(); i++) {
-		Pos q = { queryPoints[i].x, queryPoints[i].y };
-		Pos t = { trainPoints[i].x, queryPoints[i].y };
+	for (int i = 0; i < queryPoints.size(); i++)
+	{
+		Pos q = {queryPoints[i].x, queryPoints[i].y};
+		Pos t = {trainPoints[i].x, queryPoints[i].y};
 		queryPos.push_back(q);
 		trainPos.push_back(t);
 		p[0][i] = q;
 		p[1][i] = t;
 	}
+
+	Mat o;
+	drawMatches(img1, queryKeypoints, img2, trainKeypoints, goodMatches, o);
+	// Mat fundamentalMatrix = findFundamentalMat(cv::Mat(queryPoints), cv::Mat(trainPoints), cv::FM_7POINT);
+
+	// std::cout << "F-Matrix size= " << fundamentalMatrix.rows << "," << fundamentalMatrix.cols << std::endl;
+
+	// std::vector<cv::Vec3f> lines1;
+	// computeCorrespondEpilines(cv::Mat(queryPoints), 1, fundamentalMatrix, lines1);
+
+	// // for all epipolar lines
+	// for (auto it = lines1.begin(); it != lines1.end(); ++it)
+	// {
+
+	// 	// draw the epipolar line between first and last column
+	// 	cv::line(img2, cv::Point(0, -(*it)[2] / (*it)[1]),
+	// 					 cv::Point(img2.cols, -((*it)[2] + (*it)[0] * img2.cols) / (*it)[1]),
+	// 					 cv::Scalar(0, 255, 255));
+	// }
+
+
+
+	// // draw the left points corresponding epipolar lines in left image
+	// std::vector<cv::Vec3f> lines2;
+	// cv::computeCorrespondEpilines(cv::Mat(trainPoints), 1, fundamentalMatrix, lines2);
+	// for (auto it = lines2.begin(); it != lines2.end(); ++it)
+	// {
+
+	// 	// draw the epipolar line between first and last column
+	// 	cv::line(img1, cv::Point(0, -(*it)[2] / (*it)[1]),
+	// 					 cv::Point(img1.cols, -((*it)[2] + (*it)[0] * img1.cols) / (*it)[1]),
+	// 					 cv::Scalar(255, 255, 255));
+	// }
+
+	// // printf("", fundamentalMatrix);
+	imshow("matches", o);
+	// imshow("epilines 1", img1);
+	// imshow("epilines 2", img2);
+	waitKey();
 
 	(*points)->points = p;
 	(*points)->width = 2;
