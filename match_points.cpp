@@ -1,6 +1,6 @@
 #include "match_points.h"
 
-void get_match_points(char* file1, char* file2, Points** points) {
+void get_match_points(char* file1, char* file2, Points** points, double threshold) {
 	Mat img1 = imread(file1, ImreadModes::IMREAD_GRAYSCALE);
 	if (img1.empty()) {
 		printf("Invalid image!\n");
@@ -30,7 +30,7 @@ void get_match_points(char* file1, char* file2, Points** points) {
 
 	matcher->knnMatch(queryDescriptors, trainDescriptors, matches, 2);
 	for (int i = 0; i < matches.size(); i++) {
-		if (matches[i][0].distance < RATIO_THRESHOLD * matches[i][1].distance) {
+		if (matches[i][0].distance < threshold * matches[i][1].distance) {
 			goodMatches.push_back(matches[i][0]);
 			goodQueryKeypoints.push_back(queryKeypoints[matches[i][0].queryIdx]);
 			goodTrainKeypoints.push_back(trainKeypoints[matches[i][0].trainIdx]);

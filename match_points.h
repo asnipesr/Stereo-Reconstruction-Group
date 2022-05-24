@@ -12,7 +12,6 @@ using namespace std;
 
 #endif
 
-double RATIO_THRESHOLD = 0.7;
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -27,7 +26,7 @@ extern "C" {
 		Pos** points;
 	} typedef Points;
 
-	void get_match_points(char* file1, char* file2, Points** points);
+	void get_match_points(char* file1, char* file2, Points** points, double threshold);
 #ifdef __cplusplus
 }
 #endif
