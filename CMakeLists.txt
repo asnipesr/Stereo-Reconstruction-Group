@@ -2,6 +2,9 @@
 
 project ("Stereo-Reconstruction-Group")
 
+set(OpenCV_DIR /Users/nguyencanhminh/build_opencv)
+
+
 find_package (OpenCV REQUIRED)
 
 ADD_LIBRARY(match_points STATIC "match_points.cpp" "match_points.h")
