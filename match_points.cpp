@@ -65,3 +65,29 @@ void get_match_points(char* file1, char* file2, Points** points, double threshol
 	(*points)->width = 2;
 	(*points)->length = (int)queryPos.size();
 }
+
+void display_depths(int* points, int width, int height) {
+	int min = points[0];
+	int max = points[0];
+	for (int i = 0; i < height; i++) {
+		for (int j = 0; j < width; j++) {
+			if (points[(i * width) + j] < min) {
+				min = points[(i * width) + j];
+			}
+			if (points[(i * width) + j] > max) {
+				max = points[(i * width) + j];
+			}
+		}
+	}
+	std::cout << "[";
+	for (int i = 0; i < height; i++) {
+		std::cout << "[";
+		for (int j = 0; j < width; j++) {
+			points[(i * width) + j] = (points[(i * width) + j] - min) * 255 / max;
+			std::cout << points[(i * width) + j] << ",";
+		}
+		std::cout << "],";
+	}
+	std::cout << "]";
+
+}
