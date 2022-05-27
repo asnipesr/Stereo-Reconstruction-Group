@@ -21,34 +21,35 @@ int main(int argc, char* argv[])
 	int width = 1920;
 	int height = 1080;
 
-	vector camera1_pos = { 50 + width / 2, height / 2, 0 };
-	vector camera2_pos = { width / 2, height / 2, 0 };
 
-	get_match_points("..\\..\\..\\images\\im0.png", "..\\..\\..\\images\\im1.png", &p, 0.8);
+	//// I CHANGE HERE
+	vector camera1_pos = { width / 2, height / 1, 0 };
+	vector camera2_pos = { 50 + width / 2, height / 1, 0 };
+
+	get_match_points("./images/im0.png", "./images/im1.png", &p, 0.82);
 
 
-	int* dists = calloc((width / 10) * (height / 10), sizeof(int));
-	printf("%lld\n", (width / 10) * (height / 10) * sizeof(int));
+	double* dists = calloc((width / 1) * (height / 1), sizeof(double));
+	printf("%lld\n", (width / 1) * (height / 1) * sizeof(double));
 	if (dists == NULL) {
 		printf("Why?");
 		exit(-1);
 	}
 
-	for (int i = 0; i < height / 10; i++)
-	{
-		for (int j = 0; j < width / 10; j++)
+	for (int i = 0; i < height / 1; i++){
+		for (int j = 0; j < width / 1; j++)
 		{
-			int approx_img2_x;
-			int approx_img2_y;
+			double approx_img2_x;
+			double approx_img2_y;
 			// nearest matching point
-			int minDistance = 5000;
+			double minDistance = 5000;
 			int correspondingMatchPoint = 0;
 
 			for (int y = 0; y < p->length; y++)
 			{
 				// match point from img1
 				Pos p1 = p->points[0][y];
-				int dist = (int)sqrt(pow(j - p1.x, 2) + pow(i - p1.y, 2));
+				double dist = (double)sqrt(pow(j - p1.x, 2) + pow(i - p1.y, 2));
 				if (dist < minDistance) {
 					minDistance = dist;
 					correspondingMatchPoint = y;
@@ -64,16 +65,16 @@ int main(int argc, char* argv[])
 			if (minDistance != 0)
 			{
 				// offset
-				int offsetX = (int)(p2.x - p1.x);
-				int offsetY = (int)(p2.y - p1.y);
+				double offsetX = (double)(p2.x - p1.x);
+				double offsetY = (double)(p2.y - p1.y);
 
 				approx_img2_x = j + offsetX;
 				approx_img2_y = i + offsetY;
 			}
 			else
 			{
-				approx_img2_x = (int)p2.x;
-				approx_img2_y = (int)p2.y;
+				approx_img2_x = (double)p2.x;
+				approx_img2_y = (double)p2.y;
 			}
 
 
@@ -88,8 +89,8 @@ int main(int argc, char* argv[])
 			double intercept_x = (b2 - b1) / (a1 - a2);
 			double intercept_y = a1 * intercept_x + b1;
 
-			int distance_1 = (int)sqrt(pow(intercept_x - camera1_pos.x, 2) + pow(intercept_y - camera1_pos.y, 2));
-			dists[(i * (width / 10)) + j] = distance_1;
+			double distance_1 = (double)sqrt(pow(intercept_x - camera1_pos.x, 2) + pow(intercept_y - camera1_pos.y, 2));
+			dists[(i * (width / 1)) + j] = distance_1;
 			//int distance_2 = sqrt(pow(intercept_x - camera2_pos.x, 2) + pow(intercept_y - camera2_pos.y, 2));
 
 
@@ -97,28 +98,5 @@ int main(int argc, char* argv[])
 		}
 	}
 
-	display_depths(dists, width / 10, height / 10);
-
-	// for (int y = 0; y < p->length; y++)
-	// {
-	// 	// match point from img1
-	// 	Pos p1 = p->points[0][y];
-	// 	// corresponding in img2
-	// 	Pos p2 = p->points[1][y];
-
-	// 	double a1 = (p1.y - camera1_pos.y) / (p1.x - camera1_pos.x);
-	// 	double a2 = (p2.y - camera2_pos.y) / (p2.x - camera2_pos.x);
-
-	// 	double b1 = p1.y - a1 * p1.x;
-	// 	double b2 = p2.y - a2 * p2.x;
-
-	// 	double intercept_x = (b2 - b1) / (a1 - a2);
-	// 	double intercept_y = a1 * intercept_x + b1;
-
-	// 	int distance_1 = sqrt(pow(intercept_x - camera1_pos.x, 2) + pow(intercept_y - camera1_pos.y, 2));
-	// 	int distance_2 = sqrt(pow(intercept_x - camera2_pos.x, 2) + pow(intercept_y - camera2_pos.y, 2));
-
-	// 	// printf("%f, %f, %d, %d ", intercept_x, intercept_y, distance_1, distance_2);
-	// 	// printf("\n");
-	// }
+	display_depths(dists, width / 1, height / 1);
 }

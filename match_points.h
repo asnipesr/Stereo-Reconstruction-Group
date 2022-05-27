@@ -27,7 +27,7 @@ extern "C" {
 	} typedef Points;
 
 	void get_match_points(char* file1, char* file2, Points** points, double threshold);
-	void display_depths(int* points, int width, int height);
+	void display_depths(double* points, int width, int height);
 #ifdef __cplusplus
 }
 #endif
